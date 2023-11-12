@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Navbar, HomeAbout } from "./components/imports";
+import { Navbar, HomeAbout, SearchAnime } from "./components/imports";
 
 export default function Home() {
   return (
@@ -7,6 +6,7 @@ export default function Home() {
       <Navbar />
       <div className="container mt-24 mx-auto px-12 py-4">
         <HomeAbout />
+        <SearchAnime />
       </div>
     </main>
   );
