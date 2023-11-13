@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Navbar = () => {
@@ -10,23 +11,23 @@ const Navbar = () => {
       <div className="navbar-container flex justify-center flex-grow">
         <ul className="navbar-links flex space-x-4">
           <li className="navbar-search ">
-            <a href="Search">Search</a>
+            <Link href="/search">Search</Link>
           </li>
           <li className="navbar-search">
-            <a href="Social">Social</a>
+            <Link href="/social">Social</Link>
           </li>
           <li className="navbar-search">
-            <a href="Forum">Forum</a>
+            <Link href="/forum">Forum</Link>
           </li>
         </ul>
       </div>
       <div>
         <ul className="flex space-x-3">
           <li>
-            <a href="/login">Login</a>
+            <Link href="/search">Login</Link>
           </li>
           <li>
-            <a href="/register">Sign Up</a>
+            <Link href="/register">Sign Up</Link>
           </li>
         </ul>
       </div>
