@@ -1,6 +1,7 @@
 import React from "react";
 import { FeatureCard } from "./imports";
 import { FaGreaterThan } from "react-icons/fa";
+import Link from "next/link";
 
 const featureCardData = [
   {
@@ -53,7 +54,7 @@ const HomeAbout = () => {
           ))}
         </ul>
       </div>
-      <a href="/signup">
+      <Link href="/register">
         <div>
           <button
             className="home-about-btn bg-[#2e51a2] text-white font-bold py-3 px-4 rounded-full 
@@ -66,7 +67,7 @@ const HomeAbout = () => {
             <FaGreaterThan className="ml-2" />
           </button>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };

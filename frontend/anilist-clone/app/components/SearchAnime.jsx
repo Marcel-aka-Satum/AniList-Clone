@@ -1,7 +1,20 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
+import { trendingAnime } from "../api/trending";
+import { AnimeCard } from "./imports";
 
 const SearchAnime = () => {
+  const [anime, setAnime] = useState([]);
+
+  useEffect(() => {
+    const fetchAnime = async () => {
+      const data = await trendingAnime();
+      setAnime(data.data.Page.media);
+    };
+    fetchAnime();
+  }, []);
+
   return (
     <div className="searchanime-wrapper py-20">
       <div className="search-filters flex">
@@ -61,6 +74,7 @@ const SearchAnime = () => {
           </div>
         </div>
       </div>
+      {/* <AnimeCard anime={anime.coverImage} tilte={anime.title} /> */}
     </div>
   );
 };
