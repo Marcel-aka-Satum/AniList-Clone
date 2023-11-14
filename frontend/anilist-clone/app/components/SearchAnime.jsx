@@ -6,12 +6,16 @@ import { AnimeCard } from "./imports";
 import { popularAnime } from "../api/popular";
 import { upcomingAnime } from "../api/upcoming";
 import { popularAllTime } from "../api/popularAllTime";
+import { top100AnimeFetch } from "../api/top100preview";
+import Link from "next/link";
+import { AnimeCardLine } from "./imports";
 
 const SearchAnime = () => {
   const [trendingAnimeList, setTrendingAnimeList] = useState([]);
   const [popularThisSeason, setPopularThisSeason] = useState([]);
   const [upcomingNextSeason, setUpcomingNextSeason] = useState([]);
   const [allTimePopular, setAllTimePopular] = useState([]);
+  const [top100Anime, setTop100Anime] = useState([]);
 
   const fetchAnime = async () => {
     const data = await trendingAnime();
@@ -33,11 +37,17 @@ const SearchAnime = () => {
     setAllTimePopular(data.data.Page.media);
   };
 
+  const fetchTop100Preview = async () => {
+    const data = await top100AnimeFetch();
+    setTop100Anime(data.data.Page.media);
+  };
+
   useEffect(() => {
     fetchAnime();
     fetchPopular();
     fetchUpcomingSeason();
     fetchPopularAllTime();
+    fetchTop100Preview();
   }, []);
 
   return (
@@ -161,6 +171,36 @@ const SearchAnime = () => {
                   key={anime.id}
                   title={anime.title}
                   imgUrl={anime.coverImage.large}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="top-100-anime pt-8">
+        <div className="heading-top-100 flex">
+          <h1 className="text-2xl font-bold flex-end justify-end">
+            TOP 100 ANIME
+          </h1>
+          <Link href="/">
+            <span>View all</span>
+          </Link>
+        </div>
+
+        <div className="top-100-preview">
+          {top100Anime && top100Anime.length > 0 && (
+            <>
+              {top100Anime.map((anime) => (
+                <AnimeCardLine
+                  key={anime.id}
+                  title={anime.title}
+                  imgurl={anime.coverImage.medium}
+                  genres={anime.genres}
+                  popularity={anime.averageScore}
+                  type={anime.format}
+                  season={anime.season}
+                  finished={anime.status}
                 />
               ))}
             </>
