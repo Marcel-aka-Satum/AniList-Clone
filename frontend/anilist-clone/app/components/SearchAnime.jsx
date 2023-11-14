@@ -14,6 +14,7 @@ const SearchAnime = () => {
     };
     fetchAnime();
   }, []);
+  console.log(anime);
 
   return (
     <div className="searchanime-wrapper py-20">
@@ -74,7 +75,20 @@ const SearchAnime = () => {
           </div>
         </div>
       </div>
-      {/* <AnimeCard anime={anime.coverImage} tilte={anime.title} /> */}
+
+      <div className="top-10-trending flex py-7">
+        {anime && anime.length > 0 && (
+          <>
+            {anime.map((anime) => (
+              <AnimeCard
+                key={anime.id}
+                title={anime.title.english}
+                imgUrl={anime.coverImage.large}
+              />
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 };

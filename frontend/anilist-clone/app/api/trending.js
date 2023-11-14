@@ -2,7 +2,7 @@
 
 const query = `
 query topTenTrendingAnime{
-  Page(perPage: 10) {
+  Page(perPage: 6) {
     media(sort: TRENDING_DESC) {
       id
       title {
@@ -10,7 +10,7 @@ query topTenTrendingAnime{
         english
       }
       coverImage {
-        medium
+        large
         color
       }
       startDate {
