@@ -24,7 +24,7 @@ const Navbar = () => {
       <div>
         <ul className="flex space-x-3">
           <li>
-            <Link href="/search">Login</Link>
+            <Link href="/login">Login</Link>
           </li>
           <li>
             <Link href="/register">Sign Up</Link>
