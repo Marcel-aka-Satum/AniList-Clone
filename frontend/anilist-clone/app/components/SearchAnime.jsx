@@ -201,6 +201,7 @@ const SearchAnime = () => {
                   type={anime.format}
                   season={anime.season}
                   finished={anime.status}
+                  imgColor={anime.coverImage.color}
                 />
               ))}
             </>
