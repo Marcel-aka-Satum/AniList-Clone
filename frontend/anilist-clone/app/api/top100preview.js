@@ -31,6 +31,8 @@ query popularAnimeThisSeason{
     episodes
     genres
     averageScore
+    duration
+    popularity
   }
 }
 }
