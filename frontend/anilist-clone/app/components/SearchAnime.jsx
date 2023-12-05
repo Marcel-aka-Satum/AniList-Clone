@@ -179,10 +179,8 @@ const SearchAnime = () => {
       </div>
 
       <div className="top-100-anime pt-8">
-        <div className="heading-top-100 flex">
-          <h1 className="text-2xl font-bold flex-end justify-end">
-            TOP 100 ANIME
-          </h1>
+        <h1 className="text-2xl font-bold ">TOP 100 ANIME</h1>
+        <div className="heading-top-100 flex justify-end mb-2">
           <Link href="/">
             <span>View all</span>
           </Link>
@@ -191,7 +189,7 @@ const SearchAnime = () => {
         <div className="top-100-preview">
           {top100Anime && top100Anime.length > 0 && (
             <>
-              {top100Anime.map((anime) => (
+              {top100Anime.map((anime, index) => (
                 <AnimeCardLine
                   key={anime.id}
                   title={anime.title}
@@ -202,6 +200,12 @@ const SearchAnime = () => {
                   season={anime.season}
                   finished={anime.status}
                   imgColor={anime.coverImage.color}
+                  format={anime.format}
+                  duration={anime.duration}
+                  idx={index}
+                  popularity2={anime.popularity}
+                  avgScore={anime.averageScore}
+                  startDate={anime.startDate}
                 />
               ))}
             </>

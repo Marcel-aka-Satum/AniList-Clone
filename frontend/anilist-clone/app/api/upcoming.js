@@ -1,5 +1,5 @@
 //Popular anime next season
-//This file contains queries of trending animes
+//This file contains queries of trending anime next season
 
 const query = `
 query upcomingNextSeason{

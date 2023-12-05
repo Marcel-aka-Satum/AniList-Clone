@@ -1,5 +1,5 @@
 //Popular anime this season
-//This file contains queries of trending animes
+//This file contains queries of popular anime this season
 
 const query = `
 query popularAnimeThisSeason{
@@ -31,6 +31,8 @@ query popularAnimeThisSeason{
     episodes
     genres
     averageScore
+    duration
+    popularity
   }
 }
 }
