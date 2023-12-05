@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
-const AnimeCard = ({ imgUrl, title }) => {
+const AnimeCard = ({ imgUrl, title, id }) => {
   return (
     <Link
-      href="/anime/[id]"
-      as={`/anime/${title.length > 1 ? title.english : title.romaji}`}
+      href={`/anime/[id]/[title]`}
+      as={`/anime/${id}/${title.english ? title.english : title.romaji}`}
     >
       <div className="anime-card px-4 mr-5 w-[220px] h-[220px]">
         <Image

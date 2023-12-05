@@ -118,6 +118,7 @@ const SearchAnime = () => {
               {trendingAnimeList.map((anime) => (
                 <AnimeCard
                   key={anime.id}
+                  id={anime.id}
                   title={anime.title}
                   imgUrl={anime.coverImage.large}
                 />
