@@ -6,7 +6,7 @@ const Register = () => {
     <>
       <Navbar />
       <div className="flex flex-col justify-center items-center h-screen bg-[#0a1625]">
-        <div className="container-loginpage w-96 bg-[#152232] p-8 rounded shadow-md h-3/5 flex flex-col justify-between items-center">
+        <div className="container-registerpage w-96 bg-[#152232] p-8 rounded shadow-md h-3/5 flex flex-col justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold mb-16 items-center text-center">
               Sign up to AniList
