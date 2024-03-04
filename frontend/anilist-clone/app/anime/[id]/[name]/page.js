@@ -127,8 +127,11 @@ const page = ({ params }) => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1/6 relative">
+      {/*2 grid columns under description one for ratings second for staff info etc...*/}
+      <div className="second main container">
+        <div className="grid grid-cols-1/6 relative mt-64">
           <div>highest rated all time</div>
 
           <div>Relations Characters Staff</div>

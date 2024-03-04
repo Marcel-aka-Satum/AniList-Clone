@@ -4,7 +4,7 @@
 const query = `
 query popularAnimeThisSeason{
   Page(perPage:10){
-      media(sort: POPULARITY_DESC, season: FALL, seasonYear: 2023) {
+      media(sort: POPULARITY_DESC, type: ANIME) {
     id
     title {
       romaji
