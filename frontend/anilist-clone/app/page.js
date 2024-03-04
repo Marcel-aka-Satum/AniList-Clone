@@ -1,4 +1,4 @@
-import { Navbar, HomeAbout, SearchAnime, Footer } from "./components/imports";
+import { Navbar, HomeAbout, SearchAnime, Footer } from "../app/components/imports";
 
 export default function Home() {
   return (
