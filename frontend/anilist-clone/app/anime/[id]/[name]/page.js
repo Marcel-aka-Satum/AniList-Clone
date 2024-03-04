@@ -11,6 +11,7 @@ const page = ({ params }) => {
   query animeDetail{
     Page(perPage:1){
         media(search: "${params.name}" id:${params.id}) {
+      description
       id
       title {
         romaji
@@ -99,27 +100,38 @@ const page = ({ params }) => {
       </div>
 
       <div className="main container mx-auto flex-grow absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-500">
-        <div className="grid grid-cols-3 h-48 relative">
-          {/*first grid colum with the image */}
-          <div className="col-start-1 cover-wrap absolute -top-10">
-            <div className="cover">
-              <Image
-                src={anime && anime.coverImage && anime.coverImage.large}
-                height={200}
-                width={200}
-                alt="cover image"
-              />
-            </div>
-            <div className="grid grid-cols-2 mt-3">
-              <button className="btn btn-primary">Add to List</button>
-              <button className="btn btn-secondary">Heart</button>
+        <div className="grid grid-cols-1/6 h-48 relative">
+          {/*first grid column with the image */}
+          <div>
+            <div className="cover-wrap absolute -top-10">
+              <div className="cover">
+                <Image
+                  src={anime && anime.coverImage && anime.coverImage.large}
+                  height={200}
+                  width={200}
+                  alt="cover image"
+                />
+              </div>
+              <div className="grid grid-cols-2 mt-3">
+                <button className="btn btn-primary">Add to List</button>
+                <button className="btn btn-secondary">Heart</button>
+              </div>
             </div>
           </div>
 
-          {/*second grid colum with the anime description*/}
-          <div className="col-start-2 col-span-1">
-            hello this is anime description etc.
+          {/*second grid column with the anime description*/}
+          <div>
+            <div className="grid grid-rows-2">
+              <div className="description mt-3">{anime.description}</div>
+              <div className="nav mt-5">nav1 nav2 nav3</div>
+            </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1/6 relative">
+          <div>highest rated all time</div>
+
+          <div>Relations Characters Staff</div>
         </div>
       </div>
     </div>
