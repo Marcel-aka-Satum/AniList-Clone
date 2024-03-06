@@ -49,6 +49,7 @@ const url = "https://graphql.anilist.co",
     body: JSON.stringify({
       query: query,
     }),
+    cache: "no-store", // Add this line
   };
 
 function handleResponse(response) {

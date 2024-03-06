@@ -34,7 +34,7 @@ const Login = () => {
               </Link>
             </form>
           </div>
-          <Link href="/Register" className="text-sm flex hover:text-[#2596be]">
+          <Link href="/register" className="text-sm flex hover:text-[#2596be]">
             Not registered?
             <p className="text-[#2596be]">Create an account</p>
           </Link>
