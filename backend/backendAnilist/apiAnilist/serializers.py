@@ -23,19 +23,3 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('id', 'username', 'email', 'password')
     extra_kwargs = {'password': {'write_only': True, 'required': True}}
 
-  # def create(self, validated_data):
-  #   """
-  #   Create a new User object.
-
-  #   This method creates a new User object based on the validated data.
-  #   It uses the User.objects.create_user() method to create the user.
-
-  #   Args:
-  #     validated_data (dict): The validated data for creating the User object.
-
-  #   Returns:
-  #     User: The newly created User object.
-
-  #   """
-  #   user = User.objects.create_user(**validated_data)
-  #   return user

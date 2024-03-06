@@ -20,5 +20,6 @@ from apiAnilist import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/users', views.user_list)
+    path('api/users', views.user_list),
+    path('api/users/<int:pk>', views.users_detail)
 ]
