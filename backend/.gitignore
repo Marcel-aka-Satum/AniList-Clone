@@ -1,3 +1,6 @@
 venv/
 env/
-backendAnilist/backendAnilist/__pycache__/
+/__pycache__
+/backendAnilist/apiAnilist/migrations
+/backendAnilist/apiAnilist/__pycache__
+/backendAnilist/backendAnilist/__pycache__
