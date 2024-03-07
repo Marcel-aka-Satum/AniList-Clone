@@ -1,8 +1,27 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Footer, Navbar } from "../components/imports";
 import Link from "next/link";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <>
       <Navbar />
@@ -12,16 +31,23 @@ const Login = () => {
             <h1 className="text-2xl font-bold mb-16 items-center text-center">
               Login
             </h1>
-            <form className="flex flex-col items-center">
+            <form
+              className="flex flex-col items-center"
+              onSubmit={handleSubmit}
+            >
               <input
                 type="text"
                 placeholder="Email"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="Password"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="submit"
@@ -29,10 +55,10 @@ const Login = () => {
               >
                 Log in
               </button>
-              <Link href="/Recovery" className="mb-4 hover:text-[#2596be]">
-                Forgot password?
-              </Link>
             </form>
+            <Link href="/Recovery" className="mb-4 hover:text-[#2596be]">
+              Forgot password?
+            </Link>
           </div>
           <Link href="/register" className="text-sm flex hover:text-[#2596be]">
             Not registered?

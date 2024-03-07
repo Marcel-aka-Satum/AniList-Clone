@@ -1,8 +1,28 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Footer, Navbar } from "../components/imports";
 import Link from "next/link";
 
 const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUserName] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password, username }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <>
       <Navbar />
@@ -12,21 +32,28 @@ const Register = () => {
             <h1 className="text-2xl font-bold mb-16 items-center text-center">
               Sign Up To UNOFFICIAL AniList
             </h1>
-            <form className="flex flex-col items-center">
+            <form
+              className="flex flex-col items-center"
+              onSubmit={handleSubmit}
+            >
               <input
                 type="text"
                 placeholder="Email"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="text"
                 placeholder="Username"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                onChange={(e) => setUserName(e.target.value)}
               />
               <input
                 type="Password"
                 placeholder="Password"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 type="Password"
