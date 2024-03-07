@@ -6,10 +6,17 @@ import Link from "next/link";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const [username, setUserName] = useState("");
+  const [badcredentials, setBadCredentials] = useState(false);
+  const [badpassword, setBadPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password !== confirmpassword) {
+      setBadPassword(true);
+    }
 
     const response = await fetch("http://localhost:8000/api/register", {
       method: "POST",
@@ -19,8 +26,9 @@ const Register = () => {
       body: JSON.stringify({ email, password, username }),
     });
 
-    const data = await response.json();
-    console.log(data);
+    if (response.status == 409) {
+      setBadCredentials(true);
+    }
   };
 
   return (
@@ -32,6 +40,16 @@ const Register = () => {
             <h1 className="text-2xl font-bold mb-16 items-center text-center">
               Sign Up To UNOFFICIAL AniList
             </h1>
+            {badcredentials && (
+              <h2 className="text-red-500 text-lg font-bold mb-4">
+                Wrong credentials
+              </h2>
+            )}
+            {badpassword && (
+              <h2 className="text-red-500 text-lg font-bold mb-4">
+                Both passwords needs to be the same
+              </h2>
+            )}
             <form
               className="flex flex-col items-center"
               onSubmit={handleSubmit}
@@ -59,6 +77,7 @@ const Register = () => {
                 type="Password"
                 placeholder="Confirm Password"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <button
                 type="submit"

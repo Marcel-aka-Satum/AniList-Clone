@@ -6,6 +6,8 @@ import Link from "next/link";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [wrongPassword, setWrongPasword] = useState(false);
+  const [usernotfound, setUserNotFound] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,6 +19,16 @@ const Login = () => {
       },
       body: JSON.stringify({ email, password }),
     });
+
+    if (response.status === 404) {
+      //user not found
+      setUserNotFound(true);
+      setWrongPasword(false);
+    } else if (response.status === 401) {
+      //unauthorized
+      setWrongPasword(true);
+      setUserNotFound(false);
+    }
 
     const data = await response.json();
     console.log(data);
@@ -31,6 +43,16 @@ const Login = () => {
             <h1 className="text-2xl font-bold mb-16 items-center text-center">
               Login
             </h1>
+            {wrongPassword && (
+              <h2 className="text-red-500 text-lg font-bold mb-4">
+                Wrong credentials
+              </h2>
+            )}
+            {usernotfound && (
+              <h2 className="text-red-500 text-lg font-bold mb-4">
+                Account with this Username not found
+              </h2>
+            )}
             <form
               className="flex flex-col items-center"
               onSubmit={handleSubmit}
