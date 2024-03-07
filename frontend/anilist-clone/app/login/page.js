@@ -4,8 +4,9 @@ import { Footer, Navbar } from "../components/imports";
 import Link from "next/link";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [wrongPassword, setWrongPasword] = useState(false);
   const [usernotfound, setUserNotFound] = useState(false);
 
@@ -17,7 +18,7 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     if (response.status === 404) {
@@ -29,9 +30,6 @@ const Login = () => {
       setWrongPasword(true);
       setUserNotFound(false);
     }
-
-    const data = await response.json();
-    console.log(data);
   };
 
   return (
@@ -59,10 +57,10 @@ const Login = () => {
             >
               <input
                 type="text"
-                placeholder="Email"
+                placeholder="Username"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <input
                 type="password"

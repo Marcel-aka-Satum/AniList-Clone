@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, response
 from django.contrib.auth.models import User
 from .models import StatusPost, ForumPost
 from .serializers import UserSerializer, BlogSerializer, ForumSerializer
@@ -7,6 +7,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.authtoken.models import Token
+
 
 
 # Create your views here.
@@ -81,13 +84,17 @@ def forum_list(request, pk):
 def login_user(request):
     if request.method == "POST":
         data = request.data
-        userEmail = data.get('email')
         userName = data.get('username')
         password = data.get('password')
+
         try:
-            user = User.objects.get(username=userEmail)
-            if user.check_password(password):
-                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            user = authenticate(request, username=userName, password=password)
+            if user is not None:
+                login(request, user)
+                token = Token.objects.create(user=user)
+                response = Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                response.set_cookie('token', token.key, httponly=True, samesite='Lax', secure=False)
+                return response
             else:
                 return Response({"message": "Wrong Credentials"},status=status.HTTP_401_UNAUTHORIZED)
         except ObjectDoesNotExist:
@@ -107,6 +114,11 @@ def register_user(request):
             return Response({"message": "User with this username/email already exists"}, status=status.HTTP_409_CONFLICT)
         except ObjectDoesNotExist:
             user = User.objects.create_user(userName, userEmail, password)
-            return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+            userAuth = authenticate(request, username=userName, password=password)
+            login(request, user)
+            token = Token.objects.create(user=user)
+            response = Response({"message": "User created successfully", "token": token.key}, status=status.HTTP_201_CREATED)
+            response.set_cookie('token', token.key, httponly=True, samesite='None', secure=False)
+            return response
 
         
