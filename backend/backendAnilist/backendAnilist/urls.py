@@ -21,5 +21,10 @@ from apiAnilist import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users', views.user_list),
-    path('api/users/<int:pk>', views.users_detail)
+    path('api/users/<int:pk>', views.users_detail),
+    path('api/blogs/<int:pk>', views.detail_blog),
+    path('api/forum/<int:pk>', views.forum_list),
+    path('api/forum', views.forum_list_all),
+    path('api/login', views.login_user),
+    path('api/register', views.register_user),
 ]
