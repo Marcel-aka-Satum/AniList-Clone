@@ -17,6 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from apiAnilist import views
+from apiAnilist.views import MyTokenObtainPairView
+
+
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +33,7 @@ urlpatterns = [
     path('api/forum', views.forum_list_all),
     path('api/login', views.login_user),
     path('api/register', views.register_user),
+    path('api/profile', views.profile),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

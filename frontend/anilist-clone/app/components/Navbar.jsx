@@ -1,10 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import AuthContext from "../context/AuthContext";
+import React, { useState, useContext } from "react";
 
 const Navbar = ({ transparant }) => {
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const context = useContext(AuthContext);
+  console.log(context);
 
   return (
     <nav
