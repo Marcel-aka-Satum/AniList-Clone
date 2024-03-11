@@ -9,6 +9,26 @@ from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.decorators import login_required
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+    
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 
@@ -120,5 +140,15 @@ def register_user(request):
             response = Response({"message": "User created successfully", "token": token.key}, status=status.HTTP_201_CREATED)
             response.set_cookie('token', token.key, httponly=True, samesite='None', secure=False)
             return response
-
         
+@login_required
+def profile(request):
+    user = request.user
+    return JsonResponse({
+        'username': user.username,
+        'email': user.email,
+        # Include other user data here
+    })
+
+
+
