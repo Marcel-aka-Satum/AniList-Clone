@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { trendingAnime } from "../api/trending";
+import { trendingAnime } from "../app/api/trending"
 import { AnimeCard } from "./imports";
-import { popularAnime } from "../api/popular";
-import { upcomingAnime } from "../api/upcoming";
-import { popularAllTime } from "../api/popularAllTime";
-import { top100AnimeFetch } from "../api/top100preview";
+import { popularAnime } from "../app/api/popular";
+import { upcomingAnime } from "../app/api/upcoming";
+import { popularAllTime } from "../app/api/popularAllTime";
+import { top100AnimeFetch } from "../app/api/top100preview";
 import Link from "next/link";
 import { AnimeCardLine } from "./imports";
 

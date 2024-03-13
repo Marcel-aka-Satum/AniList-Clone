@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { FeatureCard } from "./imports";
 import { FaGreaterThan } from "react-icons/fa";
 import Link from "next/link";
-import AuthContext from "../context/AuthContext";
 
 const featureCardData = [
   {

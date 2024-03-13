@@ -1,19 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Footer, Navbar } from "../components/imports";
 import Link from "next/link";
+import {useRouter } from 'next/navigation'
+import Cookie from 'js-cookie';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [wrongPassword, setWrongPasword] = useState(false);
-  const [usernotfound, setUserNotFound] = useState(false);
+  const router = useRouter()
+  const { user, setUser } = useContext(AuthContext);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const response = await fetch("http://localhost:8000/api/login", {
+    const response = await fetch("http://localhost:8000/api/token/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,15 +23,17 @@ const Login = () => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (response.status === 404) {
+    if (response.status === 401 || response.status === 400) {
       //user not found
-      setUserNotFound(true);
-      setWrongPasword(false);
-    } else if (response.status === 401) {
-      //unauthorized
       setWrongPasword(true);
-      setUserNotFound(false);
+    } else if(response.status === 200){
+      //user authenticated give token and redirect to home 
+      const data = await response.json();
+      setUser(data);
+      Cookie.set('token', data.acces, { expires: 7, path:'/' }); // Expires after 7 days
+      router.push(`/user/${username}`)
     }
+
   };
 
   return (
@@ -43,12 +47,7 @@ const Login = () => {
             </h1>
             {wrongPassword && (
               <h2 className="text-red-500 text-lg font-bold mb-4">
-                Wrong credentials
-              </h2>
-            )}
-            {usernotfound && (
-              <h2 className="text-red-500 text-lg font-bold mb-4">
-                Account with this Username not found
+                User not found with these credentials
               </h2>
             )}
             <form
