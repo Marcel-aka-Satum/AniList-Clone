@@ -149,6 +149,3 @@ def profile(request):
         'email': user.email,
         # Include other user data here
     })
-
-
-

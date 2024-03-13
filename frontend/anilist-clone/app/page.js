@@ -3,7 +3,7 @@ import {
   HomeAbout,
   SearchAnime,
   Footer,
-} from "../app/components/imports";
+} from "../components/imports";
 
 export default function Home() {
   return (
