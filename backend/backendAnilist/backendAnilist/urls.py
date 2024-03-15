@@ -31,9 +31,7 @@ urlpatterns = [
     path('api/blogs/<int:pk>', views.detail_blog),
     path('api/forum/<int:pk>', views.forum_list),
     path('api/forum', views.forum_list_all),
-    path('api/login', views.login_user),
     path('api/register', views.register_user),
-    path('api/profile', views.profile),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
