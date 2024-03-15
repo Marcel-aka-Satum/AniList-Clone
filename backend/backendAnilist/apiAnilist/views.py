@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import JsonResponse, response
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from .models import StatusPost, ForumPost
 from .serializers import UserSerializer, BlogSerializer, ForumSerializer
@@ -7,9 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.decorators import login_required
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -100,26 +98,7 @@ def forum_list(request, pk):
     elif request.method == "PUT":
         pass
 
-@api_view(['POST'])
-def login_user(request):
-    if request.method == "POST":
-        data = request.data
-        userName = data.get('username')
-        password = data.get('password')
-
-        try:
-            user = authenticate(request, username=userName, password=password)
-            if user is not None:
-                login(request, user)
-                token = Token.objects.create(user=user)
-                response = Response({"message": "Login successful"}, status=status.HTTP_200_OK)
-                response.set_cookie('token', token.key, httponly=True, samesite='Lax', secure=False)
-                return response
-            else:
-                return Response({"message": "Wrong Credentials"},status=status.HTTP_401_UNAUTHORIZED)
-        except ObjectDoesNotExist:
-            return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        
+   
 @api_view(['POST'])
 def register_user(request):
     if request.method == "POST":
@@ -141,11 +120,3 @@ def register_user(request):
             response.set_cookie('token', token.key, httponly=True, samesite='None', secure=False)
             return response
         
-@login_required
-def profile(request):
-    user = request.user
-    return JsonResponse({
-        'username': user.username,
-        'email': user.email,
-        # Include other user data here
-    })

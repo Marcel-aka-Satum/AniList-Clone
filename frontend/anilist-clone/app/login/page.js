@@ -1,40 +1,13 @@
 "use client";
-import React, { useState, useContext } from "react";
-import { Footer, Navbar } from "../components/imports";
+import React, { useState, useContext} from "react";
+import { Footer, Navbar } from "../../components/imports";
 import Link from "next/link";
-import {useRouter } from 'next/navigation'
-import Cookie from 'js-cookie';
+import { AuthContext } from "../context/AuthProvider";
+
+
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [wrongPassword, setWrongPasword] = useState(false);
-  const router = useRouter()
-  const { user, setUser } = useContext(AuthContext);
-
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const response = await fetch("http://localhost:8000/api/token/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.status === 401 || response.status === 400) {
-      //user not found
-      setWrongPasword(true);
-    } else if(response.status === 200){
-      //user authenticated give token and redirect to home 
-      const data = await response.json();
-      setUser(data);
-      Cookie.set('token', data.acces, { expires: 7, path:'/' }); // Expires after 7 days
-      router.push(`/user/${username}`)
-    }
-
-  };
+  const {loginUser, wrongPassword} = useContext(AuthContext);
 
   return (
     <>
@@ -52,21 +25,19 @@ const Login = () => {
             )}
             <form
               className="flex flex-col items-center"
-              onSubmit={handleSubmit}
+              onSubmit={loginUser}
             >
               <input
                 type="text"
                 placeholder="Username"
+                name="username"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="Password"
+                name="password"
                 className="w-full p-2 mb-4 border border-gray-300 rounded bg-[#0a1625]"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="submit"
