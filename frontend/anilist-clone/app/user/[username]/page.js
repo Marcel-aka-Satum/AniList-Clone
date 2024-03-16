@@ -1,19 +1,21 @@
 "use client";
-import React, {useContext} from 'react'
-import { AuthContext } from '../../context/AuthProvider';
-import {useRouter } from 'next/navigation'
+import React, {useState} from 'react'
+import {Footer, Navbar} from '../../../components/imports'
 
 export default function page() {
-  const { user } = useContext(AuthContext);
-  const router = useRouter();
+  const [user, setUser] = useState(window.localStorage.getItem('user') || null);
+
   if (!user) {
-    alert('You need to be logged in to view this page');
-    router.push('/login');
+    return <div className='text-red-500'>Not logged in.</div>;
   }
-  
+
   return (
-    <div>
-      {user && user.username && <p className='text-red-500'>Hello {user.username}</p>}
+    <div className="flex min-h-screen flex-col bg-[#0a1625]"> 
+      <Navbar/>
+      <div className="container mt-24 mx-auto px-12 py-4">
+        <h1 className='text-red-500'>Welcome {user}</h1>
+      </div>
+      <Footer/>
     </div>
-  )
+  );
 }

@@ -11,15 +11,8 @@ export const AuthProvider = ({ children }) => {
   let [authTokens, setAuthToken] = useState(null);
   let [user, setUser] = useState(null);
   const [wrongPassword, setWrongPasword] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setAuthToken(JSON.parse(token));
-      setUser(jwtDecode(token));
-    }
-  }, []);
 
   const loginUser = async (event) => {
     event.preventDefault();
@@ -41,6 +34,7 @@ export const AuthProvider = ({ children }) => {
       setAuthToken(data);
       const decodedUser = jwtDecode(data.access);
       setUser(decodedUser);
+      localStorage.setItem('user', decodedUser.username);
       localStorage.setItem('token', JSON.stringify(data));
       router.push(`/user/${decodedUser.username}`)
     } else{
@@ -51,8 +45,11 @@ export const AuthProvider = ({ children }) => {
 
 
   let contextData = {
-    user:user,
-    loginUser:loginUser,
+    user,
+    loginUser,
+    setUser,
+    wrongPassword,
+    loading,
   }
 
 
