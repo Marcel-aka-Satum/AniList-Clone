@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Footer, Navbar } from "../components/imports";
+import { Footer, Navbar } from "../../components/imports";
 import Link from "next/link";
 
 const Register = () => {
