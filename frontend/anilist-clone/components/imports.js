@@ -5,3 +5,5 @@ export { default as SearchAnime } from "./SearchAnime";
 export { default as AnimeCard } from "./AnimeCard";
 export { default as AnimeCardLine } from "./AnimeCardLine";
 export { default as Footer } from "./Footer";
+export { default as ImageCard } from "./ImageCard";
+export { default as WatchedCard } from "./WatchedCard";
