@@ -1,35 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Footer, Navbar } from "../../components/imports";
 import Link from "next/link";
+import { AuthContext } from "../context/AuthProvider";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [username, setUserName] = useState("");
-  const [badcredentials, setBadCredentials] = useState(false);
   const [badpassword, setBadPassword] = useState(false);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (password !== confirmpassword) {
-      setBadPassword(true);
-    }
-
-    const response = await fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password, username }),
-    });
-
-    if (response.status == 409) {
-      setBadCredentials(true);
-    }
-  };
+  //context
+  const { registerUser, badcredentials } = useContext(AuthContext);
 
   return (
     <>
@@ -52,7 +34,7 @@ const Register = () => {
             )}
             <form
               className="flex flex-col items-center"
-              onSubmit={handleSubmit}
+              onSubmit={(e) => registerUser(e, email, password, username)}
             >
               <input
                 type="text"

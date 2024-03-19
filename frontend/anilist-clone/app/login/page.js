@@ -1,13 +1,11 @@
 "use client";
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Footer, Navbar } from "../../components/imports";
 import Link from "next/link";
 import { AuthContext } from "../context/AuthProvider";
 
-
-
 const Login = () => {
-  const {loginUser, wrongPassword} = useContext(AuthContext);
+  const { loginUser, wrongPassword } = useContext(AuthContext);
 
   return (
     <>
@@ -23,10 +21,7 @@ const Login = () => {
                 User not found with these credentials
               </h2>
             )}
-            <form
-              className="flex flex-col items-center"
-              onSubmit={loginUser}
-            >
+            <form className="flex flex-col items-center" onSubmit={loginUser}>
               <input
                 type="text"
                 placeholder="Username"
