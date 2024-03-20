@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import StatusPost, ForumPost
+from .models import StatusPost, ForumPost, Profile
 
 class UserSerializer(serializers.ModelSerializer):
   """
@@ -70,3 +70,26 @@ class ForumSerializer(serializers.ModelSerializer):
     model = ForumPost
     fields = ('id', 'title', 'content', 'author', 'date_posted')
     extra_kwargs = {'author': {'read_only': True}}
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    """
+    Serializer class for the Profile model.
+
+    This serializer is used to serialize and deserialize Profile objects.
+    It defines the fields to be included in the serialized representation of a Profile,
+    and provides a create() method to handle object creation.
+
+    Attributes:
+      model (class): The Profile model class.
+      fields (tuple): The fields to be included in the serialized representation.
+      extra_kwargs (dict): Additional keyword arguments for specific fields.
+
+    Methods:
+      create(validated_data): Creates a new Profile object based on the validated data.
+
+    """
+    class Meta:
+        model = Profile
+        fields = ('id', 'username', 'avatar', 'banner', 'is_authenticated')
+        extra_kwargs = {'user': {'read_only': True}}

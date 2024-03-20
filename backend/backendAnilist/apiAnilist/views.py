@@ -1,13 +1,15 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import StatusPost, ForumPost
-from .serializers import UserSerializer, BlogSerializer, ForumSerializer
+from .models import StatusPost, ForumPost, Profile
+from .serializers import UserSerializer, BlogSerializer, ForumSerializer, ProfileSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
+from django.shortcuts import render, redirect
+from .forms import ProfileForm
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -120,3 +122,33 @@ def register_user(request):
             response.set_cookie('token', token.key, httponly=True, samesite='None', secure=False)
             return response
         
+#data that should be in browser's local storage
+@api_view(['GET'])
+def user_data(request, pk):
+    if request.method == "GET":
+        user = User.objects.get(pk=pk)
+        serializer = ProfileSerializer(user)
+        return JsonResponse(serializer.data, safe=False)
+    
+    
+def update_profile(request):
+    if request.method == 'POST':
+        try:
+            profile = Profile.objects.get(user=request.user)
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+        except Profile.DoesNotExist:
+            form = ProfileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('profile')
+    else:
+        try:
+            profile = Profile.objects.get(user=request.user)
+            form = ProfileForm(instance=profile)
+        except Profile.DoesNotExist:
+            form = ProfileForm()
+
+    return render(request, {'form': form})

@@ -1,7 +1,6 @@
 "use client";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 
 export const AuthContext = createContext();

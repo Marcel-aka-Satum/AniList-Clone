@@ -17,3 +17,16 @@ class StatusPost(models.Model):
     # change blank=True to False if you want to require an author for each post, null =False to require an author for each post
     likes = models.ManyToManyField(User, related_name='likes', blank=True) # blank=True allows for no likes
     dislikes = models.ManyToManyField(User, related_name='dislikes', blank=True) # blank=True allows for no dislikes
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    banner = models.ImageField(upload_to='banners/', null=True, blank=True)    
+
+    @property
+    def username(self):
+        return self.user.username
+    
+    @property
+    def is_authenticated(self):
+        return self.user.is_authenticated
