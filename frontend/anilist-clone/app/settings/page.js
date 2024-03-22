@@ -8,8 +8,31 @@ export default function Page() {
   const [avatar, setAvatar] = useState(null);
   const [banner, setBanner] = useState(null);
 
-  const handleSave = () => {
-    console.log({ email, password, avatar, banner });
+  const handleSave = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
+    if (banner) {
+      formData.append("banner", banner);
+    }
+    const response = await fetch(
+      "http://localhost:8000/api/update_profile/11",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+    } else {
+      console.error("Failed to update profile");
+    }
   };
 
   return (
@@ -22,7 +45,7 @@ export default function Page() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-2 py-1 rounded-md"
+            className="px-2 py-1 rounded-md text-black"
           />
         </label>
         <label className="flex flex-col items-center space-y-2">
@@ -31,7 +54,7 @@ export default function Page() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-2 py-1 rounded-md"
+            className="px-2 py-1 rounded-md text-black"
           />
         </label>
         <label className="flex flex-col items-center space-y-2">
@@ -40,7 +63,7 @@ export default function Page() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-2 py-1 rounded-md"
+            className="px-2 py-1 rounded-md text-black"
           />
         </label>
         <label className="flex flex-col items-center space-y-2">

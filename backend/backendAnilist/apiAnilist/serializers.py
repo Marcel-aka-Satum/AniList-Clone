@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import StatusPost, ForumPost, Profile
+from django.conf import settings
 
 class UserSerializer(serializers.ModelSerializer):
   """
@@ -23,8 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     fields = ('id', 'username', 'email', 'password')
     extra_kwargs = {'password': {'write_only': True, 'required': True}}
-
-
 
 class BlogSerializer(serializers.ModelSerializer):
   """
@@ -89,7 +88,21 @@ class ProfileSerializer(serializers.ModelSerializer):
       create(validated_data): Creates a new Profile object based on the validated data.
 
     """
+    avatar = serializers.SerializerMethodField()
+    banner = serializers.SerializerMethodField()
     class Meta:
         model = Profile
-        fields = ('id', 'username', 'avatar', 'banner', 'is_authenticated')
+        fields = ('id', 'username', 'avatar', 'banner', 'is_authenticated', 'email')
         extra_kwargs = {'user': {'read_only': True}}
+
+    def get_avatar(self, obj):
+      profile = Profile.objects.get(user=obj)
+      if profile.avatar:
+          return settings.MEDIA_URL + str(profile.avatar)
+      return None
+
+    def get_banner(self, obj):
+        profile = Profile.objects.get(user=obj)
+        if profile.banner:
+            return settings.MEDIA_URL + str(profile.banner)
+        return None

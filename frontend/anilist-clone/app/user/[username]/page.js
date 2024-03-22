@@ -9,7 +9,9 @@ import {
 import Link from "next/link";
 
 export default function page() {
-  const [user, setUser] = useState(window.localStorage.getItem("user") || null);
+  const [user, setUser] = useState(
+    JSON.parse(window.localStorage.getItem("user")) || null
+  );
 
   if (!user) {
     return <div className="text-red-500">Not logged in.</div>;
@@ -20,18 +22,18 @@ export default function page() {
       <Navbar />
       <div className="banner mt-32 relative" style={{ height: "250px" }}>
         <img
-          src={"/banner2.jpg"}
+          src={`http://localhost:8000${user.banner}`}
           style={{ width: "100%", height: "100%" }}
           alt="Banner"
         />
         <img
-          src={"/avatar.jpg"}
+          src={`http://localhost:8000${user.avatar}`}
           className="absolute"
           style={{ left: "16.667%", bottom: "20px", height: 120, width: 120 }}
           alt="Profile"
         />
         <div className="absolute" style={{ left: "20%", bottom: "20px" }}>
-          <h2 className="text-white font-bold">{user}</h2>
+          <h2 className="text-white font-bold">{user.username}</h2>
         </div>
       </div>
 

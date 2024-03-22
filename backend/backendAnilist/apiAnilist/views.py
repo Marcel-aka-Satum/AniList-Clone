@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 from django.shortcuts import render, redirect
 from .forms import ProfileForm
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -130,29 +131,24 @@ def user_data(request, pk):
         user = User.objects.get(pk=pk)
         serializer = ProfileSerializer(user)
         return JsonResponse(serializer.data, safe=False)
-    
+
+@api_view(['POST'])
 @csrf_exempt
 def update_profile(request, pk):
     if request.method == 'POST':
-        try:
-            profile = Profile.objects.get(pk=pk)
-            form = ProfileForm(request.POST, request.FILES, instance=profile)
-        except Profile.DoesNotExist:
-            form = ProfileForm(request.POST, request.FILES)
+        # Update User model
+        user = User.objects.get(pk=pk)
+        user.email = request.POST['email']
+        user.set_password(request.POST['password'])
+        user.save()
 
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            # Serialize the profile data
-            serializer = ProfileSerializer(profile)
-            # Return the serialized data
-            return JsonResponse(serializer.data, safe=False)
+        # Update Profile model
+        profile, created = Profile.objects.get_or_create(user=user)
+        profile.avatar = request.FILES.get('avatar', profile.avatar)
+        profile.banner = request.FILES.get('banner', profile.banner)
+        profile.save()
+
+        return JsonResponse({'message': 'Profile updated successfully'}, safe=False)
+
     else:
-        try:
-            profile = Profile.objects.get(pk=pk)
-            form = ProfileForm(instance=profile)
-        except Profile.DoesNotExist:
-            form = ProfileForm()
-
-    return JsonResponse(form.data, safe=False)
+        return JsonResponse({'message': 'Invalid request'}, safe=False)
