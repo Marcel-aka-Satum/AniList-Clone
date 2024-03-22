@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/profile_info/<int:pk>', views.user_data),
+    path('api/update_profile/<int:pk>', views.update_profile),
 ]
 
 if settings.DEBUG:

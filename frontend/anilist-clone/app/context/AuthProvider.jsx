@@ -7,7 +7,6 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   let [authTokens, setAuthToken] = useState(null);
-  let [user, setUser] = useState(null);
   const [wrongPassword, setWrongPasword] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -35,8 +34,22 @@ export const AuthProvider = ({ children }) => {
       //user authenticated give token and redirect to home
       setAuthToken(data);
       const decodedUser = jwtDecode(data.access);
-      setUser(decodedUser);
-      localStorage.setItem("user", decodedUser.username);
+      let userObj = {};
+      fetch(`http://localhost:8000/api/profile_info/${decodedUser.user_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          userObj = data;
+          localStorage.setItem("user", JSON.stringify(userObj));
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
       localStorage.setItem("token", JSON.stringify(data));
       router.push(`/user/${decodedUser.username}`);
     } else {
@@ -65,9 +78,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   let contextData = {
-    user,
     loginUser,
-    setUser,
     wrongPassword,
     loading,
     badcredentials,
