@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
 from django.shortcuts import render, redirect
 from .forms import ProfileForm
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -130,11 +131,11 @@ def user_data(request, pk):
         serializer = ProfileSerializer(user)
         return JsonResponse(serializer.data, safe=False)
     
-    
-def update_profile(request):
+@csrf_exempt
+def update_profile(request, pk):
     if request.method == 'POST':
         try:
-            profile = Profile.objects.get(user=request.user)
+            profile = Profile.objects.get(pk=pk)
             form = ProfileForm(request.POST, request.FILES, instance=profile)
         except Profile.DoesNotExist:
             form = ProfileForm(request.POST, request.FILES)
@@ -143,12 +144,15 @@ def update_profile(request):
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return redirect('profile')
+            # Serialize the profile data
+            serializer = ProfileSerializer(profile)
+            # Return the serialized data
+            return JsonResponse(serializer.data, safe=False)
     else:
         try:
-            profile = Profile.objects.get(user=request.user)
+            profile = Profile.objects.get(pk=pk)
             form = ProfileForm(instance=profile)
         except Profile.DoesNotExist:
             form = ProfileForm()
 
-    return render(request, {'form': form})
+    return JsonResponse(form.data, safe=False)
