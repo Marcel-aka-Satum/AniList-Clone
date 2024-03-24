@@ -5,11 +5,13 @@ import { Footer, Navbar } from "../../components/imports";
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpsswd, setConfirmPsswd] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [banner, setBanner] = useState(null);
 
   const handleSave = async (event) => {
     event.preventDefault();
+    let userObj = JSON.parse(window.localStorage.getItem("user"));
     const formData = new FormData();
     formData.append("email", email);
     formData.append("password", password);
@@ -19,15 +21,35 @@ export default function Page() {
     if (banner) {
       formData.append("banner", banner);
     }
+    if (password !== null && password !== confirmpsswd) {
+      if (password !== confirmpsswd) {
+        console.error("Passwords do not match");
+        return;
+      }
+    }
     const response = await fetch(
-      "http://localhost:8000/api/update_profile/11",
+      `http://localhost:8000/api/update_profile/${userObj.id}`,
       {
         method: "POST",
         body: formData,
       }
     );
 
-    if (response.ok) {
+    if (response.status === 200) {
+      fetch(`http://localhost:8000/api/profile_info/${userObj.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          userObj = data;
+          localStorage.setItem("user", JSON.stringify(userObj));
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
       const data = await response.json();
       console.log(data.message);
     } else {
@@ -61,8 +83,8 @@ export default function Page() {
           Confirm Password:
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={confirmpsswd}
+            onChange={(e) => setConfirmPsswd(e.target.value)}
             className="px-2 py-1 rounded-md text-black"
           />
         </label>

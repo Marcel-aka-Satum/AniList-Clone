@@ -66,15 +66,20 @@ export const AuthProvider = ({ children }) => {
       },
       body: JSON.stringify({ email, password, username }),
     });
-    console.log("starting register");
     if (response.status === 409) {
       setBadCredentials(true);
     } else if (response.status === 201) {
       //user created successfully
       setBadCredentials(false);
-      console.log("user created");
       router.push("/login");
     }
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    router.push("/");
   };
 
   let contextData = {
@@ -83,6 +88,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     badcredentials,
     registerUser,
+    loginUser,
+    logoutUser,
   };
 
   return (

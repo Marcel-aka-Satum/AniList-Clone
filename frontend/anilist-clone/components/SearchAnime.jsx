@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { trendingAnime } from "../app/api/trending"
+import { trendingAnime } from "../app/api/trending";
 import { AnimeCard } from "./imports";
 import { popularAnime } from "../app/api/popular";
 import { upcomingAnime } from "../app/api/upcoming";
@@ -128,7 +128,7 @@ const SearchAnime = () => {
         </div>
       </div>
 
-      <div className="popular-this-season flex flex-col py-7 mb-12">
+      <div className="popular-this-season flex flex-col py-7 mb-14">
         <h1 className="text-2xl font-bold mb-3">POPULAR THIS SEASON</h1>
         <div className="anime-images flex">
           {popularThisSeason && popularThisSeason.length > 0 && (

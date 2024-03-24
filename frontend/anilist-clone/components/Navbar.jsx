@@ -1,11 +1,16 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../app/context/AuthProvider";
 
 const Navbar = ({ transparant }) => {
-  const [navbarOpen, setNavbarOpen] = useState(false);
-
+  let { logoutUser } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const storedUser = JSON.parse(window.localStorage.getItem("user"));
+    setUser(storedUser);
+  }, []);
 
   return (
     <nav
@@ -32,12 +37,23 @@ const Navbar = ({ transparant }) => {
       </div>
       <div>
         <ul className="flex space-x-3">
-          <li>
-            <Link href="/login">Login</Link>
-          </li>
-          <li>
-            <Link href="/register">Sign Up</Link>
-          </li>
+          {user ? (
+            <li className="flex">
+              <Link href={`/user/${user.username}`}>Profile </Link>
+              <button className="ml-3" onClick={logoutUser}>
+                Logout
+              </button>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link href="/login">Login</Link>
+              </li>
+              <li>
+                <Link href="/register">Sign Up</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
