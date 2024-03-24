@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Footer,
   Navbar,
@@ -9,9 +9,11 @@ import {
 import Link from "next/link";
 
 export default function page() {
-  const [user, setUser] = useState(
-    JSON.parse(window.localStorage.getItem("user")) || null
-  );
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const storedUser = JSON.parse(window.localStorage.getItem("user"));
+    setUser(storedUser);
+  }, []);
 
   if (!user) {
     return <div className="text-red-500">Not logged in.</div>;
@@ -22,18 +24,26 @@ export default function page() {
       <Navbar />
       <div className="banner mt-32 relative" style={{ height: "250px" }}>
         <img
-          src={`http://localhost:8000${user.banner}`}
+          src={
+            user.banner
+              ? `http://localhost:8000${user.banner}`
+              : "/defaultBanner.jpg"
+          }
           style={{ width: "100%", height: "100%" }}
           alt="Banner"
         />
         <img
-          src={`http://localhost:8000${user.avatar}`}
+          src={
+            user.avatar
+              ? `http://localhost:8000${user.avatar}`
+              : "/defaultAvatar.jpg"
+          }
           className="absolute"
           style={{ left: "16.667%", bottom: "20px", height: 120, width: 120 }}
           alt="Profile"
         />
-        <div className="absolute" style={{ left: "20%", bottom: "20px" }}>
-          <h2 className="text-white font-bold">{user.username}</h2>
+        <div className="absolute" style={{ left: "24%", bottom: "20px" }}>
+          <h2 className="text-black font-bold">{user.username}</h2>
         </div>
       </div>
 

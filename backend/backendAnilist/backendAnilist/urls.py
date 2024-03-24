@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from apiAnilist import views
@@ -27,17 +28,18 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/users', views.user_list),
-    path('api/users/<int:pk>', views.users_detail),
-    path('api/blogs/<int:pk>', views.detail_blog),
-    path('api/forum/<int:pk>', views.forum_list),
-    path('api/forum', views.forum_list_all),
-    path('api/register', views.register_user),
-    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/profile_info/<int:pk>', views.user_data),
-    path('api/update_profile/<int:pk>', views.update_profile),
+    path("admin/", admin.site.urls),
+    path("api/users", views.user_list),
+    path("api/users/<int:pk>", views.users_detail),
+    path("api/blogs/<int:pk>", views.detail_blog),
+    path("api/forum/<int:pk>", views.forum_list),
+    path("api/forum", views.forum_list_all),
+    path("api/register", views.register_user),
+    path("api/token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/profile_info/<int:pk>", views.user_data),
+    path("api/update_profile/<int:pk>", views.update_profile),
+    path("api/anime/<int:pk>", views.anime),
 ]
 
 if settings.DEBUG:
