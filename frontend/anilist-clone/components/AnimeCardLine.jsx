@@ -40,6 +40,7 @@ const AnimeCardLine = ({
           <div className="genres flex flex-wrap mb-4">
             {genres.map((genre) => (
               <button
+                key={genre}
                 className="mr-2 mb-1 py-1 px-2 rounded-full text-sm"
                 style={{
                   backgroundColor: imgColor,

@@ -39,7 +39,8 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/profile_info/<int:pk>", views.user_data),
     path("api/update_profile/<int:pk>", views.update_profile),
-    path("api/anime/<int:pk>", views.anime),
+    path("api/watched_anime/<int:pk>", views.watched_animes),
+    path("api/favorite_anime/<int:pk>", views.favorite_animes),
 ]
 
 if settings.DEBUG:

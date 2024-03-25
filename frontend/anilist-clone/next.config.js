@@ -3,6 +3,6 @@ const nextConfig = {};
 
 module.exports = {
   images: {
-    domains: ["s4.anilist.co"],
+    domains: ["s4.anilist.co", "localhost"],
   },
 };
