@@ -2,6 +2,16 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+def user_directory_path_avatar(instance, filename):
+    # file will be uploaded to media/user_<id>/avatar/<filename>
+    return "{0}/{1}/{2}".format(instance.user.id, "avatar", filename)
+
+
+def user_directory_path_banner(instance, filename):
+    # file will be uploaded to media/user_<id>/banners/<filename>
+    return "{0}/{1}/{2}".format(instance.user.id, "banner", filename)
+
+
 class ForumPost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -28,20 +38,10 @@ class StatusPost(models.Model):
     )  # blank=True allows for no dislikes
 
 
-def user_directory_path_avatar(instance, filename):
-    # file will be uploaded to media/user_<id>/avatar/<filename>
-    return "{0}/{1}/{2}".format(instance.user.id, "avatar", filename)
-
-
-def user_directory_path_banner(instance, filename):
-    # file will be uploaded to media/user_<id>/banners/<filename>
-    return "{0}/{1}/{2}".format(instance.user.id, "banner", filename)
-
-
 class Anime(models.Model):
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to="anime_images/")
-    published_date = models.DateField()
+    published_date = models.DateField(null=True, blank=True)
 
 
 class Profile(models.Model):
@@ -52,7 +52,12 @@ class Profile(models.Model):
     banner = models.ImageField(
         upload_to=user_directory_path_banner, null=True, blank=True
     )
-    watched_animes = models.ManyToManyField(Anime, blank=True)
+    watched_animes = models.ManyToManyField(
+        Anime, blank=True, related_name="watched_by"
+    )
+    favorite_animes = models.ManyToManyField(
+        Anime, blank=True, related_name="favorited_by"
+    )
 
     @property
     def username(self):

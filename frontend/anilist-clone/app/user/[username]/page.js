@@ -5,14 +5,27 @@ import {
   Navbar,
   ImageCard,
   WatchedCard,
+  AnimeCard,
 } from "../../../components/imports";
 import Link from "next/link";
 
 export default function page() {
   const [user, setUser] = useState(null);
+  const [watchedAnimes, setWatchedAnimes] = useState([]);
+  const [favoriteAnimes, setFavoriteAnimes] = useState([]);
   useEffect(() => {
     const storedUser = JSON.parse(window.localStorage.getItem("user"));
     setUser(storedUser);
+    //fetch favorite animes
+    fetch(`http://localhost:8000/api/favorite_anime/${storedUser.id}`)
+      .then((response) => response.json())
+      .then((data) => setFavoriteAnimes(data))
+      .catch((error) => console.error("Error:", error));
+    //fetch watched animes
+    fetch(`http://localhost:8000/api/watched_anime/${storedUser.id}`)
+      .then((response) => response.json())
+      .then((data) => setWatchedAnimes(data))
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   if (!user) {
@@ -64,27 +77,19 @@ export default function page() {
             <div className="flex flex-col space-y-4 w-1/2">
               <div className="flex flex-col space-y-4">
                 <div>
-                  Anime
-                  <div className="grid grid-cols-5 gap-4">
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
+                  Favorite Anime
+                  <div className="grid grid-cols-5 gap-8">
+                    {favoriteAnimes.map((anime) => (
+                      <ImageCard
+                        imgsrc={`http://localhost:8000${anime.image}`}
+                      />
+                    ))}
                   </div>
                 </div>
                 <div>
-                  Characters
-                  <div className="grid grid-cols-5 gap-4">
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
-                    <ImageCard />
+                  Favorite Characters
+                  <div className="grid grid-cols-5 gap-4 text-red-500">
+                    Soon coming out...
                   </div>
                 </div>
               </div>

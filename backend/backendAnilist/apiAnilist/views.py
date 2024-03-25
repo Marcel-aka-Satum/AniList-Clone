@@ -1,22 +1,24 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login
+from django.core.files.base import ContentFile
+import requests
+
 from .models import StatusPost, ForumPost, Profile, Anime
+from .forms import ProfileForm
 from .serializers import (
     UserSerializer,
     BlogSerializer,
     ForumSerializer,
     ProfileSerializer,
+    AnimeSerializer,
 )
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
-from django.shortcuts import render, redirect
-from .forms import ProfileForm
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -173,11 +175,46 @@ def update_profile(request, pk):
         return JsonResponse({"message": "Invalid request"}, safe=False)
 
 
-@api_view(["GET"])
-def anime(request, pk):
+@api_view(["GET", "POST"])
+def watched_animes(request, pk):
     if request.method == "GET":
         user = User.objects.get(id=pk)
         watched_animes = user.profile.watched_animes.all()
-        return watched_animes
-    else:
-        return JsonResponse({"message": "Invalid request"})
+        serializer = AnimeSerializer(watched_animes, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == "POST":  # add watched anime
+        anime, created = Anime.objects.get_or_create(name=request.data.get("name"))
+        if created:  # if the anime is new
+            response = requests.get(request.data.get("image"))
+            anime.image.save(
+                f"{anime.name}.jpg", ContentFile(response.content), save=True
+            )
+            anime.name = request.data.get("name")
+            anime.save()
+        user = User.objects.get(id=pk)
+        user.profile.watched_animes.add(anime)
+        user.save()
+        return JsonResponse({"message": "Anime added to watched"}, safe=False)
+
+
+@api_view(["GET", "POST"])
+def favorite_animes(request, pk):
+    # get all favorite animes
+    if request.method == "GET":
+        user = User.objects.get(id=pk)
+        fav_animes = user.profile.favorite_animes.all()
+        serializer = AnimeSerializer(fav_animes, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == "POST":  # add a favorite anime
+        anime, created = Anime.objects.get_or_create(name=request.data.get("name"))
+        if created:  # if the anime is new
+            response = requests.get(request.data.get("image"))
+            anime.image.save(
+                f"{anime.name}.jpg", ContentFile(response.content), save=True
+            )
+            anime.name = request.data.get("name")
+            anime.save()
+        user = User.objects.get(id=pk)
+        user.profile.favorite_animes.add(anime)
+        user.save()
+        return JsonResponse({"message": "Anime added to favorites"}, safe=False)

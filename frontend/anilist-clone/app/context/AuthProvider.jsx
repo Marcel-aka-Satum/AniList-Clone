@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   let [authTokens, setAuthToken] = useState(null);
   const [wrongPassword, setWrongPasword] = useState(false);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [badcredentials, setBadCredentials] = useState(false);
 
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       //user not found
       setWrongPasword(true);
     } else if (response.status === 200) {
-      //user authenticated give token and redirect to home
+      //user authenticated give token and redirect to his profile page
       setAuthToken(data);
       const decodedUser = jwtDecode(data.access);
       let userObj = {};
@@ -75,17 +74,47 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  let updateToken = async (authtoken) => {
+    let response = await fetch("http://localhost:8000/api/token/refresh/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh: authtoken?.refresh }),
+    });
+
+    let data = await response.json();
+
+    if (response.status === 200) {
+      localStorage.setItem("token", JSON.stringify(data));
+      setAuthToken(data);
+    } else {
+      logoutUser();
+    }
+  };
+
   const logoutUser = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     setAuthToken(null);
-    router.push("/");
+    router.push("/login");
   };
+
+  useEffect(() => {
+    if (authTokens) {
+      let fourMinutes = 1000 * 60 * 4;
+      let interval = setInterval(() => {
+        if (authTokens) {
+          updateToken(authTokens);
+        }
+      }, fourMinutes);
+      return () => clearInterval(interval);
+    }
+  }, [authTokens]);
 
   let contextData = {
     loginUser,
     wrongPassword,
-    loading,
     badcredentials,
     registerUser,
     loginUser,
