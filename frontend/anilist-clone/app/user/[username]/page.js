@@ -80,7 +80,7 @@ export default function page() {
                   Favorite Anime
                   <div className="grid grid-cols-5 gap-4">
                     {favoriteAnimes.map((anime) => (
-                      <Imag
+                      <ImageCard
                         eCard
                         key={anime.id}
                         imgsrc={`http://localhost:8000${anime.image}`}
