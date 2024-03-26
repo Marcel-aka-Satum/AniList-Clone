@@ -78,9 +78,11 @@ export default function page() {
               <div className="flex flex-col space-y-4">
                 <div>
                   Favorite Anime
-                  <div className="grid grid-cols-5 gap-8">
+                  <div className="grid grid-cols-5 gap-4">
                     {favoriteAnimes.map((anime) => (
                       <ImageCard
+                        eCard
+                        key={anime.id}
                         imgsrc={`http://localhost:8000${anime.image}`}
                       />
                     ))}
@@ -120,15 +122,12 @@ export default function page() {
               <div>
                 Recently Watched Animes
                 <div className="grid grid-cols-2 gap-3">
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
-                  <WatchedCard />
+                  {watchedAnimes.map((anime) => (
+                    <WatchedCard
+                      key={anime.id}
+                      imgsrc={`http://localhost:8000${anime.image}`}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
